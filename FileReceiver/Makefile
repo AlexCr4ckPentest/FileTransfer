@@ -6,7 +6,7 @@ PROJECT=file-receiver
 $(PROJECT): src/main.cpp src/file_receiver.cpp include/file_receiver.hpp
 	$(CXX) -c $(CXX_FLAGS) src/main.cpp
 	$(CXX) -c $(CXX_FLAGS) src/file_receiver.cpp
-	$(CXX) $(LIBS) main.o file_receiver.o -o $@
+	$(CXX) main.o file_receiver.o $(LIBS) -o $@
 	rm -f *.o
 
 .PHONY: clean
