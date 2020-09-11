@@ -32,7 +32,7 @@ namespace file_sender
 
     ssize_t send_file_data(sockpp::tcp_connector& sock, const std::string& file_data) noexcept
     {
-        const size_t file_data_size {file_data.size() + 1};
+        const size_t file_data_size {file_data.size()};
         sock.write_n(std::to_string(file_data_size).c_str(), BLOCK_SIZE_IN_BYTES);
         return (sock.write_n(file_data.c_str(), file_data_size));
     }
