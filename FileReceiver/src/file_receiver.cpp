@@ -13,11 +13,11 @@ namespace file_receiver
         return (static_cast<size_t>(std::stoull(next_block_size)));
     }
 
-    std::pair<std::string, size_t> receive_data_from_client(sockpp::tcp_socket& sock) noexcept
+    std::pair<char*, size_t> receive_data_from_client(sockpp::tcp_socket& sock) noexcept
     {
         const size_t buffer_size {read_next_block_size(sock)};
 
-        char buffer[buffer_size];
+        char* buffer {new char[buffer_size]};
         sock.read_n(buffer, buffer_size);
 
         return {buffer, buffer_size};

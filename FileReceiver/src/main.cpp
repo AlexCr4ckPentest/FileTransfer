@@ -66,8 +66,11 @@ int main(int argc, char** argv)
 
     const std::string final_filename {output_folder + filename};
 
-    file_receiver::write_data_to_file(final_filename, file_data);
+    file_receiver::write_data_to_file(final_filename, file_data, file_data_size);
     std::cout << "[***] File saved as: " << std::quoted(final_filename) << "\n";
+
+    delete[] file_data;
+    delete[] filename;
 
     client.close();
     tcp_acceptor.close();
