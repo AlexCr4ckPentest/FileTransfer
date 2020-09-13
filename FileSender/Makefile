@@ -6,7 +6,7 @@ PROJECT=file-sender
 $(PROJECT): src/main.cpp src/file_sender.cpp include/file_sender.hpp
 	$(CXX) -c $(CXX_FLAGS) src/main.cpp
 	$(CXX) -c $(CXX_FLAGS) src/file_sender.cpp
-	$(CXX) $(LIBS) main.o file_sender.o -o $@
+	$(CXX) main.o file_sender.o $(LIBS) -o $@
 	rm -f *.o
 
 .PHONY: clean
