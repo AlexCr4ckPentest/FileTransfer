@@ -1,6 +1,6 @@
 CXX=g++
 CXX_FLAGS=-Wall -Wextra -Wpedantic -O3 -Os -std=c++17
-LIBS=-lsockpp -lboost_filesystem
+LIBS=-L. libsockpp.so -lboost_filesystem
 PROJECT=file-sender
 
 $(PROJECT): src/main.cpp src/file_sender.cpp include/file_sender.hpp
