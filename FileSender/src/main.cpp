@@ -9,7 +9,7 @@
 int main(int argc, char** argv)
 {
     if (argc < 4) {
-        std::cerr << "Error: missing arguments!\n";
+        std::cerr << "[!!!] Error: missing arguments!\n";
         std::cout << "Usage: " << argv[0] << " <dest addr> <dest port> <filename>\n";
         std::exit(1);
     }
