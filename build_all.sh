@@ -41,7 +41,6 @@ function build_file_receiver() {
 
 
 function cleanup() {
-#    cd $SOCKPP_LIB_BUILD_DIR && make clean
     cd $PROJECT_ROOT_DIR && rm -rf $SOCKPP_LIB_ROOT_DIR
 }
 
