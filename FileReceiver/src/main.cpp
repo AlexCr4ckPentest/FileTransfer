@@ -3,7 +3,12 @@
 
 #include <sockpp/inet_address.h>
 
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
 #include "../include/file_receiver.hpp"
+
+
 
 int main(int argc, char** argv)
 {
@@ -60,16 +65,14 @@ int main(int argc, char** argv)
     const std::string filename {file_receiver::receive_filename(client)};
 
     std::cout << "[***] Receiving bytes from <-- " << client.peer_address().to_string() << "\n";
-    const auto [file_data, file_data_size] {file_receiver::receive_file_data(client)};
+    const std::string file_data {file_receiver::receive_file_data(client)};
 
-    std::cout << "[***] Bytes received: " << file_data_size << " (" << file_data_size / 1024 << "." << file_data_size % 1000 << " Kib)\n";
+    std::cout << "[***] Bytes received: " << file_data.size() << " (" << file_data.size() / 1024 << "." << file_data.size() % 1000 << " Kib)\n";
 
     const std::string final_filename {output_folder + filename};
 
-    file_receiver::write_data_to_file(final_filename, file_data, file_data_size);
+    file_receiver::write_data_to_file(final_filename, file_data.c_str(), file_data.size());
     std::cout << "[***] File saved as: " << std::quoted(final_filename) << "\n";
-
-    delete[] file_data;
 
     client.close();
     tcp_acceptor.close();
