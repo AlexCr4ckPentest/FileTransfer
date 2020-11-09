@@ -3,7 +3,14 @@
 namespace file_sender
 {
     inline static constexpr const uint8_t BLOCK_SIZE_IN_BYTES {23};
-    
+
+
+
+    void send_error_code(sockpp::tcp_connector& sock, const uint8_t code) noexcept
+    {
+        sock.write_n(&code, sizeof(code));
+    }
+
 
 
     void send_error_code_and_close_connection(sockpp::tcp_connector& sock, const uint8_t code) noexcept
@@ -12,16 +19,32 @@ namespace file_sender
         sock.close();
     }
 
+
+
     std::string read_file(std::FILE* file) noexcept
     {
-        char buffer {};
-        std::string file_data {};
+        std::fseek(file, 0, SEEK_END);
+        const size_t file_size {static_cast<size_t>(std::ftell(file))};
 
-        while (std::fread(&buffer, sizeof(buffer), sizeof(char), file))
-            file_data += buffer;
+        std::fseek(file, 0, SEEK_SET);
+
+        if (file_size <= 4096)
+        {
+            char buffer[file_size];
+            std::fread(buffer, file_size, sizeof(char), file);
+            return {buffer};
+        }
+
+        std::string file_data {};
+        file_data.reserve(file_size);
+        file_data.resize(file_size);
+
+        std::fread(file_data.data(), sizeof(char), file_size, file);
 
         return file_data;
     }
+
+
 
     ssize_t send_filename(sockpp::tcp_connector& sock, const std::string& filename) noexcept
     {
@@ -29,6 +52,8 @@ namespace file_sender
         sock.write_n(std::to_string(filename_size).c_str(), BLOCK_SIZE_IN_BYTES);
         return (sock.write_n(filename.c_str(), filename_size));
     }
+
+
 
     ssize_t send_file_data(sockpp::tcp_connector& sock, const std::string& file_data) noexcept
     {

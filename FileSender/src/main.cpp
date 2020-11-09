@@ -4,7 +4,17 @@
 
 #include <sockpp/inet_address.h>
 
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+
 #include "../include/file_sender.hpp"
+
+
+
+inline static bool check_file_type(const boost::filesystem::path& path) noexcept
+{ return (boost::filesystem::status(path).type() == boost::filesystem::file_type::regular_file); }
+
+
 
 int main(int argc, char** argv)
 {
@@ -29,7 +39,7 @@ int main(int argc, char** argv)
 
     const boost::filesystem::path file_path {argv[3]};
 
-    if (!file_sender::check_file_type(file_path)) {
+    if (!check_file_type(file_path)) {
         std::cerr << "[!!!] Error: unsupported file type: " << std::quoted(file_path.string()) << "\n";
         file_sender::send_error_code_and_close_connection(tcp_connector, 4);
         std::exit(4);
