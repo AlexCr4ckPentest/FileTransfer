@@ -1,5 +1,10 @@
 #include "../include/file_receiver.hpp"
 
+#include <string>
+#include <fstream>
+
+
+
 namespace file_receiver
 {
     inline static constexpr const uint8_t BLOCK_SIZE_IN_BYTES {23};
@@ -13,6 +18,8 @@ namespace file_receiver
         return (static_cast<size_t>(std::stoull(next_block_size)));
     }
 
+
+
     std::string receive_filename(sockpp::tcp_socket& sock) noexcept
     {
         const size_t buffer_size {read_next_block_size(sock)};
@@ -23,13 +30,24 @@ namespace file_receiver
         return {buffer};
     }
 
-    std::pair<char*, size_t> receive_file_data(sockpp::tcp_socket& sock) noexcept
+
+
+    std::string receive_file_data(sockpp::tcp_socket& sock) noexcept
     {
         const size_t buffer_size {read_next_block_size(sock)};
+        std::string buffer {};
 
-        char* buffer {new char[buffer_size]};
-        sock.read_n(buffer, buffer_size);
+        buffer.reserve(buffer_size);
+        buffer.resize(buffer_size);
+        sock.read_n(buffer.data(), buffer_size);
 
-        return {buffer, buffer_size};
+        return buffer;
+    }
+
+
+
+    void write_data_to_file(const std::string& file_path, const char* data, const size_t data_size) noexcept
+    {
+        std::ofstream {file_path, std::ios::binary}.write(data, data_size);
     }
 } // namespace file_receiver

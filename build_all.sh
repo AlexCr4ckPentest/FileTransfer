@@ -28,20 +28,19 @@ function cpy_library_to_project_source_dirs() {
 
 function build_file_sender() {
     echo -e "\e[1;34m[***]\e[0m Building file-sender..."
-    cd $FILE_SENDER_SRC_DIR && make &> /dev/null
+    cd $FILE_SENDER_SRC_DIR && make &> /dev/null &
     echo -e "\e[1;32m[+]\e[0m Building finished!"
 }
 
 
 function build_file_receiver() {
     echo -e "\e[1;34m[***]\e[0m Building file-receiver..."
-    cd $FILE_RECEIVER_SRC_DIR && make &> /dev/null
+    cd $FILE_RECEIVER_SRC_DIR && make &> /dev/null &
     echo -e "\e[1;32m[+]\e[0m Building finished!"
 }
 
 
 function cleanup() {
-#    cd $SOCKPP_LIB_BUILD_DIR && make clean
     cd $PROJECT_ROOT_DIR && rm -rf $SOCKPP_LIB_ROOT_DIR
 }
 
